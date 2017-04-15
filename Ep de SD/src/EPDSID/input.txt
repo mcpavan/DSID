@@ -1,0 +1,14 @@
+createp p1 part
+addp
+createp sp1 subpart
+addsubpart 2
+createp sp2 subpart
+addsubpart 1
+createp p2 part
+addp
+listp
+getp 4
+bind 2
+clearlist
+addsubpart
+listp
