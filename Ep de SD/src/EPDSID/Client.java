@@ -19,7 +19,7 @@ import java.util.function.BiConsumer;
  */
 public class Client {
     private Scanner sc;
-    private String serverName, subPartsList;
+    private String serverName, subPartsList, rmiIp;
     private PartRepository repository;
     private Part currentPart;
     private HashMap<Part, Integer> currentSubPartList;
@@ -33,6 +33,10 @@ public class Client {
     public static void main (String[] args){
         try{
             Client client = new Client();
+            System.out.println("Type the RMI Registry IP: ");
+            client.rmiIp = client.sc.nextLine();
+            if(client.rmiIp.equals("")) client.rmiIp = null;
+            
             boolean connected = client.showServers();
             while (connected){
                 connected = client.run();
@@ -44,7 +48,7 @@ public class Client {
     }
     
     private boolean showServers() throws Exception{
-        Registry registry = LocateRegistry.getRegistry();
+        Registry registry = LocateRegistry.getRegistry(rmiIp);
         for(int i = 0; i < 3; i++){
             System.out.println("These are the connected servers at this moment:\n" + Arrays.toString(registry.list()) + "\n");
             System.out.println("\nPlease use bind <server name> to connect to a server.");
@@ -62,7 +66,7 @@ public class Client {
     
     private boolean connect() throws Exception{
         try{
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(rmiIp);
             this.repository = (PartRepository) registry.lookup(serverName);
             return true;
         } catch (Exception e){
