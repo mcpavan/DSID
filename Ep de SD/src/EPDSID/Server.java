@@ -34,18 +34,24 @@ public class Server implements PartRepository{
     
     public static void main(String[] args){
         try{
+            Scanner sc = new Scanner(System.in);
             Server server = new Server(args[0]);        
             PartRepository stub = (PartRepository) UnicastRemoteObject.exportObject(server, 0);
             //bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry();
+            System.out.println("Type the RMI Registry IP: ");
+            String ip = sc.nextLine();
+            if(ip.equals("")) ip = null;
+            
+            Registry registry = LocateRegistry.getRegistry(ip);
             registry.bind(server.serverName, stub);
             
             System.err.println("The server " + server.serverName + " is running.");
             System.out.println();
-            Scanner sc = new Scanner(System.in);
-            if(sc.nextLine().equals("quit")){
-                registry.unbind(server.serverName);
+            while(!sc.nextLine().equals("quit")){
+                System.out.println();
             }
+            registry.unbind(server.serverName);
+            System.exit(0);
         } catch (Exception e){
             System.err.println("Server exception: " + e.toString());
             e.printStackTrace();
