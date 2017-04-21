@@ -168,6 +168,10 @@ public class Client {
                 currentSubPartList.clear();
                 System.out.println("The SubPart list has been cleared!");
                 break;
+            case "showreplist":
+                Registry registry = LocateRegistry.getRegistry();
+                System.out.println("These are the connected servers at this moment:\n" + Arrays.toString(registry.list()) + "\n\nPlease use bind <server name> to connect to a different server.");
+                break;
             default:
                 System.out.println("Please type a valid command:\n"+
                                     "quit\t\t\tdisconnects the client\n" +
