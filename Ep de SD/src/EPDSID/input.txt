@@ -1,14 +1,24 @@
-createp p1 part
-addp
-createp sp1 subpart
+addp p1 partS1
+addp sp1 subpartS1
 addsubpart 2
-createp sp2 subpart
-addsubpart 1
-createp p2 part
-addp
-listp
-getp 4
-bind 2
+bind S2
+addp sp2 subpartS2
+addsubpart 3
+addp p2 partS2
+bind S1
+addp p2 partS2
 clearlist
-addsubpart
+showrep
 listp
+getp 1
+showp
+locationp
+isprimitive
+nsubpart
+listsubpart
+getp 4
+showp
+locationp
+isprimitive
+nsubpart
+listsubpart

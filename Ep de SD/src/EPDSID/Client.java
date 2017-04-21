@@ -126,13 +126,6 @@ public class Client {
                     System.out.println("The new part has been added to the current repository!");
                 }
                 break;
-            case "createp":
-                if(splittedLine[2].equals(line) || splittedLine[2] == null) System.out.println("Please insert the arguments for this command: addp <name> <desc>");
-                else{
-                    currentPart = new Part(splittedLine[1], splittedLine[2]);
-                    System.out.println("The new part has been created!");
-                }
-                break;
             case "showp":
                 if (currentPart == null) System.out.println("There is no part selected to show."); 
                 else System.out.println(currentPart.getPartInfo());
@@ -174,7 +167,7 @@ public class Client {
                 System.out.println("The SubPart list has been cleared!");
                 break;
             case "showreplist":
-                Registry registry = LocateRegistry.getRegistry();
+                Registry registry = LocateRegistry.getRegistry(rmiIp);
                 System.out.println("These are the connected servers at this moment:\n" + Arrays.toString(registry.list()) + "\n\nPlease use bind <server name> to connect to a different server.");
                 break;
             default:
@@ -184,8 +177,7 @@ public class Client {
                                     "showrep\t\t\tshows repository information\n" +
                                     "listp\t\t\tlists the repository parts\n" +
                                     "getp <partCode>\t\tgets the part to current part\n" +
-                                    "addp\t\t\t\tadds the current part and subPart list to the repository\n" +
-                                    "createp <name> <desc>\tcreates a new part on current Part \n" +
+                                    "addp <name> <desc>\tadds a new part and with current subPart list to the repository\n" +
                                     "showp\t\t\tshows current part information\n" +
                                     "locationp\t\tshows current part location\n" +
                                     "isprimitive\t\ttells if the current part is primitive\n" +
