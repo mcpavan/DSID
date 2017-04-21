@@ -46,8 +46,9 @@ public class Client {
     private boolean showServers() throws Exception{
         Registry registry = LocateRegistry.getRegistry();
         for(int i = 0; i < 3; i++){
-            System.out.println("These are the connected servers at this moment:\n" + Arrays.toString(registry.list()) + "\n\nPlease use bind <server name> to connect to a server.");
-
+            System.out.println("These are the connected servers at this moment:\n" + Arrays.toString(registry.list()) + "\n");
+            System.out.println("\nPlease use bind <server name> to connect to a server.");
+            
             String line = sc.nextLine();
             String[] splittedLine = line.split(" ");
             if(splittedLine[0].equals("bind")){

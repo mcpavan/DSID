@@ -41,7 +41,7 @@ public class Server implements PartRepository{
             registry.bind(server.serverName, stub);
             
             System.err.println("The server " + server.serverName + " is running.");
-            
+            System.out.println();
             Scanner sc = new Scanner(System.in);
             if(sc.nextLine().equals("quit")){
                 registry.unbind(server.serverName);
