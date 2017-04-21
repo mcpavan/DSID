@@ -5,6 +5,7 @@
  */
 package EPDSID;
 
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.HashMap;
  *
  * @author theus
  */
-public interface PartRepository extends Remote {
+public interface PartRepository extends Remote, Serializable {
     public String getRepositoryInfo() throws RemoteException;
     public int containsPart(int partCode) throws RemoteException;
     public String getPartList() throws RemoteException;
