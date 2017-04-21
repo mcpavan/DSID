@@ -5,6 +5,7 @@
  */
 package EPDSID;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
@@ -12,7 +13,7 @@ import java.util.function.BiConsumer;
  *
  * @author theus
  */
-public class Part{
+public class Part implements Serializable{
     private static int count = 0;
     private int code;
     private String name, desc, location, subPartsList;
