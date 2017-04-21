@@ -7,6 +7,7 @@ package EPDSID;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 /**
  *
@@ -17,6 +18,6 @@ public interface PartRepository extends Remote {
     public int containsPart(int partCode) throws RemoteException;
     public String getPartList() throws RemoteException;
     
-    public void addNewPart(Part part, int quantity) throws RemoteException;
+    public Part addNewPart(String name, String desc, HashMap<Part, Integer> subPartList, int quantity) throws RemoteException;
     public Part getPart(int partCode) throws RemoteException;
 }

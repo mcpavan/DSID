@@ -8,10 +8,9 @@ package EPDSID;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
 /**
@@ -25,23 +24,16 @@ public class Client {
     private Part currentPart;
     private HashMap<Part, Integer> currentSubPartList;
     
-    private Client(String serverName){
-        this.serverName = serverName;
+    private Client(){
         this.sc = new Scanner(System.in);
         currentPart = null;
         currentSubPartList = new HashMap<>();
     }
     
     public static void main (String[] args){
-        if (args.length<1){
-            System.err.println("No args found.");
-            return;
-        }
-        
-        String serverName = args[0];
         try{
-            Client client = new Client(serverName);
-            boolean connected = client.connect();
+            Client client = new Client();
+            boolean connected = client.showServers();
             while (connected){
                 connected = client.run();
             }
@@ -49,6 +41,22 @@ public class Client {
             System.err.println("Client Exception: " + e);
             e.printStackTrace();
         } 
+    }
+    
+    private boolean showServers() throws Exception{
+        Registry registry = LocateRegistry.getRegistry();
+        for(int i = 0; i < 3; i++){
+            System.out.println("These are the connected servers at this moment:\n" + Arrays.toString(registry.list()) + "\n\nPlease use bind <server name> to connect to a server.");
+
+            String line = sc.nextLine();
+            String[] splittedLine = line.split(" ");
+            if(splittedLine[0].equals("bind")){
+                serverName = splittedLine[1];
+                if(connect()) return true;
+            }
+        }
+        System.out.println("Three attempts failed. Closing the Client.");
+        return false;
     }
     
     private boolean connect() throws Exception{
@@ -107,24 +115,9 @@ public class Client {
                 
                 break;
             case "addp":
-                if(currentPart==null) System.out.println("There is no part to add.");
+                if(splittedLine[2] == null) System.out.println("Please insert the arguments for this command: addp <name> <desc>");
                 else{
-                    /*BiConsumer<Part, Integer> addSubParts = (part, quantity) -> {
-                        try {
-                            if(part.getPartLocation() == null){
-                                part.setLocation(serverName);
-                                repository.addNewPart(part, quantity);
-                            }
-                        } catch (RemoteException e) {
-                            System.err.println("Client Exception: " + e);
-                            e.printStackTrace();
-                        }
-                    };*/
-                    
-                    currentPart.setLocation(serverName);
-                    currentPart.addSubPartList((HashMap<Part, Integer>)currentSubPartList.clone());
-                    //currentSubPartList.forEach(addSubParts);
-                    repository.addNewPart(currentPart,1);
+                    currentPart = repository.addNewPart(splittedLine[1], splittedLine[2], currentSubPartList, 1);
                     System.out.println("The new part has been added to the current repository!");
                 }
                 break;
@@ -168,22 +161,7 @@ public class Client {
                     currentSubPartList.put(currentPart, quantity);
                     System.out.println("The subpart has been added to the SubPart List!");
                 } else if(currentSubPartList.containsKey(currentPart)) {
-                    /*Set subPartSet = currentSubPartList.keySet();
-                    for(Iterator it = subPartSet.iterator(); it.hasNext();){
-                        Part p = (Part) it.next();
-                        if(p.getPartCode()==currentPart.getPartCode()){
-                            currentSubPartList.replace(p, (int)(currentSubPartList.get(p))+quantity);
-                            return true;
-                        }
-                    }*/
                     currentSubPartList.replace(currentPart, (int)(currentSubPartList.get(currentPart))+quantity);
-                    repository.addNewPart(currentPart, quantity);
-                    System.out.println("The SubPart quantity has been updated on the SubPart List!");
-                } else {
-                    currentPart.setLocation(serverName);
-                    currentSubPartList.put(currentPart, quantity);
-                    repository.addNewPart(currentPart, quantity);
-                    System.out.println("The subpart has been added to the SubPart List!");
                 }
                 break;
             case "clearlist":
@@ -206,6 +184,7 @@ public class Client {
                                     "listsubpart\t\tlists the current part subComponents\n" +
                                     "addsubpart <n>\t\tadds the current part to the current subpart list\n" +
                                     "clearlist\t\tclears the current subpart list\n" +
+                                    "showreplist\t\tshows the active repositories\n" +
                                     "help\t\t\tshows help message");
         }
         System.out.println("\n\n");

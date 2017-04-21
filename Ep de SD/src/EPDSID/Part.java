@@ -5,7 +5,6 @@
  */
 package EPDSID;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
@@ -13,10 +12,11 @@ import java.util.function.BiConsumer;
  *
  * @author theus
  */
-public class Part implements Serializable{
+public class Part{
     private static int count = 0;
     private int code;
     private String name, desc, location, subPartsList;
+    PartRepository server;
     private HashMap<Part, Integer> subComp;
     
     public Part(String name, String desc){
@@ -64,8 +64,13 @@ public class Part implements Serializable{
         this.subComp = subPartList;
     }
     
-    public void setLocation(String location){
+    public void setLocation(String location,PartRepository server){
         this.location = location;
+        this.server = server;
+    }
+    
+    public PartRepository getServer(){
+        return server;
     }
     
     public String getPartInfo(){
@@ -77,6 +82,10 @@ public class Part implements Serializable{
     }
     
     public int getSubPartCount(){
-        return subComp.size();
+        int cont = 0;
+        for (Part part : subComp.keySet()){
+            cont += subComp.get(part);
+        }
+        return cont;
     }
 }

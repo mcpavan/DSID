@@ -11,6 +11,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -40,6 +41,11 @@ public class Server implements PartRepository{
             registry.bind(server.serverName, stub);
             
             System.err.println("The server " + server.serverName + " is running.");
+            
+            Scanner sc = new Scanner(System.in);
+            if(sc.nextLine().equals("quit")){
+                registry.unbind(server.serverName);
+            }
         } catch (Exception e){
             System.err.println("Server exception: " + e.toString());
             e.printStackTrace();
@@ -80,19 +86,24 @@ public class Server implements PartRepository{
     }
     
     @Override
-    public void addNewPart(Part part, int quantity) throws RemoteException {
-        /*Set partSet = repository.keySet();
+    public Part addNewPart(String name, String desc, HashMap<Part, Integer> subPartList, int quantity) throws RemoteException {
+        Set partSet = repository.keySet();
         for(Iterator it = partSet.iterator(); it.hasNext();){
             Part p = (Part) it.next();
-            if(p.getPartName().equals(part.getPartName()) &&
-               p.getPartDesc().equals(part.getPartDesc()) &&
-               p.getSubPartList().equals(part.getSubPartList())){
+            if(p.getPartName().equals(name) &&
+               p.getPartDesc().equals(desc) &&
+               p.getSubPartList().equals(subPartList)){
                 repository.replace(p, (int)(repository.get(p))+quantity);
-                return;
+                return p;
             }
-        }*/
-        if(repository.containsKey(part)) repository.replace(part, (int)(repository.get(part))+quantity);
-        else repository.put(part, quantity);
+        }
+        /*if(repository.containsKey(part)) repository.replace(part, (int)(repository.get(part))+quantity);
+        */
+        Part part = new Part(name, desc);
+        part.setLocation(serverName, this);
+        part.addSubPartList((HashMap <Part, Integer>) subPartList.clone());
+        repository.put(part, quantity);
+        return part;
     }
     
     @Override
