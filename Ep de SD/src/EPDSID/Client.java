@@ -144,22 +144,19 @@ public class Client {
                 break;
             case "listsubpart":
                 if (currentPart == null) System.out.println("There is no part selected to show."); 
-                else{
-                    subPartsList = "";
-                    currentSubPartList.forEach(writeList);
-                    System.out.println(subPartsList);
-                }
+                else System.out.println(currentPart.getSubPartList());
                 break;
             case "addsubpart":
                 int quantity = 1;
                 if(splittedLine.length > 1) quantity = Integer.parseInt(splittedLine[1]);
                 
                 if(currentPart == null) System.out.println("There is no part selected to add.");
-                else if(currentPart.getPartLocation() != null && !currentPart.getPartLocation().equals(serverName)){
+                else if(currentSubPartList.containsKey(currentPart)) {
+                    currentSubPartList.replace(currentPart, (int)(currentSubPartList.get(currentPart))+quantity);
+                    System.out.println("The subpart quantity has been updated on the SubPart List!");
+                } else {
                     currentSubPartList.put(currentPart, quantity);
                     System.out.println("The subpart has been added to the SubPart List!");
-                } else if(currentSubPartList.containsKey(currentPart)) {
-                    currentSubPartList.replace(currentPart, (int)(currentSubPartList.get(currentPart))+quantity);
                 }
                 break;
             case "clearlist":

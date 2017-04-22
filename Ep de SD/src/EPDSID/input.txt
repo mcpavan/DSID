@@ -1,3 +1,5 @@
+192.168.0.13
+bind S1
 addp p1 partS1
 addp sp1 subpartS1
 addsubpart 2
@@ -16,7 +18,7 @@ locationp
 isprimitive
 nsubpart
 listsubpart
-getp 4
+getp 3
 showp
 locationp
 isprimitive

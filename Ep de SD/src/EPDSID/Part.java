@@ -46,6 +46,7 @@ public class Part implements Serializable{
         };
         subPartsList = "";
         subComp.forEach(writeList);
+        if(subPartsList.equals("")) subPartsList = "This part has no subparts.";
         return subPartsList;
     }
     
